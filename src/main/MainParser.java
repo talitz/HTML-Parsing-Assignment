@@ -12,6 +12,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import com.google.gson.Gson;
+
 import jsons.BillRecord;
 import jsons.BillRecordsResult;
 import jsons.PaymentRecord;
@@ -88,17 +90,17 @@ public class MainParser {
 		Element table = body.getElementById("PaymentsTable");
 		Elements rows = table.select("tr");
 
+		PaymentRecordsResult paymentRecordsResult = new PaymentRecordsResult();
+		result.setPaymentRecordsResult(paymentRecordsResult);
+		ArrayList<PaymentRecord> paymentRecord = new ArrayList<PaymentRecord>();
+		paymentRecordsResult.setPaymentRecord(paymentRecord);
+		paymentRecordsResult.setCurrentTime(today.toString());
+		paymentRecordsResult.setWeeksBefore(weeksBefore);
+		    
 		for (int i = 1; i < rows.size(); i++) { //first row is the col names so skip it.
 		    Element row = rows.get(i);
 		    Elements cols = row.select("td");
 
-		    PaymentRecordsResult paymentRecordsResult = new PaymentRecordsResult();
-		    result.setPaymentRecordsResult(paymentRecordsResult);
-		    ArrayList<PaymentRecord> paymentRecord = new ArrayList<PaymentRecord>();
-		    paymentRecordsResult.setPaymentRecord(paymentRecord);
-		    paymentRecordsResult.setCurrentTime(today.toString());
-		    paymentRecordsResult.setWeeksBefore(weeksBefore);
-		   
 		    String paymentDate = cols.first().text();
 		    if(paymentDate.matches(Constants.dateRegularExpression)) { //if bill date is of date syntax
 		    	String[] paymentDateSplited = paymentDate.split("/");
@@ -143,11 +145,12 @@ public class MainParser {
 		sumResult.setResult(sumOfAllPaymentAmounts);
 	}
 	
-	public static void createAndSaveResultsIntoFile(String resultsfilename) throws IOException {
+	public static void createAndSaveResultsIntoFile(String resultsfilename, String content) throws IOException {
 	    File file = new File(Constants.resultsFileName);
 		
 	    if (file.createNewFile()){
-	        System.out.println("Results file is created!");
+			System.out.println("You can view the results in results.json file as well :) Enjoy!");
+	    	System.out.println("For your convinient, you can format the results with http://jsonviewer.stack.hu/");
 	    } else {
 	        System.out.println("Results file already exists!");
 	    }
@@ -155,12 +158,9 @@ public class MainParser {
 		BufferedWriter bw = null;
 		FileWriter fw = null;
 		try {
-			String content = "This is the content to write into file\n";
-
 			fw = new FileWriter(Constants.resultsFileName);
 			bw = new BufferedWriter(fw);
 			bw.write(content);
-			System.out.println("Done");
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
@@ -183,10 +183,9 @@ public class MainParser {
 		runTaskFive(LocalDate.of(2016,Month.JANUARY,1),1); //assumptions given in the assignment, today is 1/1/2016, and we want all data 1 week before that date
 		runTaskSix("2015","11");
 
-		System.out.println("Results object was created: ");
+		System.out.println("Results object was created!");
 		System.out.println(result.toString());
-		
 		Gson gson = new Gson();
-		gson.toJson(result, new FileWriter(Constants.resultsFileName));
+		createAndSaveResultsIntoFile(Constants.resultsFileName,gson.toJson(result));
 	}
 }
