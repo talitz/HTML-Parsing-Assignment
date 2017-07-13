@@ -16,7 +16,7 @@ public final class Constants  {
 	  public static final String AccountInfoFile = "AccountInfo.html";  
 	  public static final String PaymentHistoryFile =  "PaymentHistory.html";
 	  
-	  //this regular expression accepts dd/mm/yyyy,dd-mm-yyyy or dd.mm.yyyy
-	  public static final String dateRegularExpression = "^([0-2][0-9]||3[0-1])/(0[0-9]||1[0-2])/([0-9][0-9])?[0-9][0-9]$";
+	  //formats accepted mm/dd/yyyy or mm-dd-yyyy or mm.dd.yyyy format
+	  public static final String dateRegularExpression = "^(?:(?:(?:0?[13578]|1[02])(\\/|-|\\.)31)\\1|(?:(?:0?[1,3-9]|1[0-2])(\\/|-|\\.)(?:29|30)\\2))(?:(?:1[6-9]|[2-9]\\d)?\\d{2})$|^(?:0?2(\\/|-|\\.)29\\3(?:(?:(?:1[6-9]|[2-9]\\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:(?:0?[1-9])|(?:1[0-2]))(\\/|-|\\.)(?:0?[1-9]|1\\d|2[0-8])\\4(?:(?:1[6-9]|[2-9]\\d)?\\d{2})$";
 	
 }
