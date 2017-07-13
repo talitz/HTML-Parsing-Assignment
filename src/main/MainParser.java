@@ -186,5 +186,6 @@ public class MainParser {
 
 		System.out.println("Results object was created!/n" + result.toString());
 		createAndSaveResultsIntoFile(Constants.resultsFileName,new Gson().toJson(result));
+
 	}
 }
